@@ -1,0 +1,18 @@
+version: "3"
+
+# Define the services/containers to be run
+services:
+  eis:
+    image: robertbosse/eis:hw
+    ports:
+      - "9000:9000" #specify ports forwarding
+    volumes:
+      - .:/usr/src/app
+    depends_on:
+      - database
+
+  database: # name of the service
+    image: mongo # specify image to build container from
+    ports:
+      - "27017:27017"
+    command: mongod
