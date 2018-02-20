@@ -54,8 +54,8 @@ class AddEmployeeViewController: UIViewController {
             employeeData.employee.first_name = firstName
         }
         
-        if let phone = phoneTextField?.text {
-            employeeData.employee.phone = Int64(phone)!
+        if let phone = Int64(phoneTextField?.text ?? "5555555555") {
+            employeeData.employee.phone = phone
         }
         
         if let email = emailTextField?.text {
@@ -71,8 +71,8 @@ class AddEmployeeViewController: UIViewController {
             employeeData.address.street = street
         }
         
-        if let zipcode = zipcodeText?.text {
-            employeeData.address.zipcode = Int64(zipcode)!
+        if let zipcode = Int64(zipcodeText?.text ?? "55555") {
+            employeeData.address.zipcode = zipcode
         }
         
         if let state = stateTextField?.text {
@@ -84,17 +84,17 @@ class AddEmployeeViewController: UIViewController {
         }
         
         
-        if let pay = payTextField?.text {
-            employeeData.compensation.pay = Int32(pay)!
+        if let pay = Int32(payTextField?.text ?? "0")  {
+            employeeData.compensation.pay = pay
         }
         
-        if let stock = stockTextField?.text {
-            employeeData.compensation.stock = Int32(stock)!
+        if let stock = Int32(stockTextField?.text ?? "0") {
+            employeeData.compensation.stock = stock
         }
         
         
-        if let childrens = childrenTextField?.text {
-            employeeData.family.childrens = Int(childrens)!
+        if let childrens = Int(childrenTextField?.text ?? "0") {
+            employeeData.family.childrens = childrens
         }
         
         employeeData.family.marital_status = ((marriedSwitch?.isOn.description) != nil)
