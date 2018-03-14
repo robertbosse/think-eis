@@ -44,74 +44,93 @@ class EmployeesViewController: UIViewController, UITableViewDelegate, UITableVie
     
     // Get all employee data from API
     func getAllEmployees() {
-        //Implementing URLSession
-        let urlString = "http://localhost:9000/employees"
+        var resourceFileDictionary: NSDictionary?
         
-        guard let url = URL(string: urlString) else { return }
-        var urlRequest = URLRequest(url: url)
-        urlRequest.setValue("application/json", forHTTPHeaderField: "Content-Type")
-        
-        URLSession.shared.dataTask(with: urlRequest) { (data, response, error) in
-            if error != nil {
-                print(error!.localizedDescription)
-            }
+        if let path = Bundle.main.path(forResource: "Info", ofType: "plist") {
+            resourceFileDictionary = NSDictionary(contentsOfFile: path)
             
-            guard let data = data else { return }
-            //Implement JSON decoding and parsing
-            do {
-                //Decode retrived data with JSONDecoder and assing type of Article object
-                self.employeeData = try JSONDecoder().decode([EmployeeFromAll].self, from: data)
+            if let resourceFileDictionaryContent = resourceFileDictionary {
                 
-                //Get back to the main queue
-                DispatchQueue.main.async {
-                    if self.refCtrl != nil && (self.refCtrl?.isRefreshing)! {
-                        self.refCtrl?.endRefreshing()
+                //Implementing URLSession
+                let urlString = (resourceFileDictionaryContent.object(forKey: "ServerIP")! as! String) + "/employees"
+                
+                guard let url = URL(string: urlString) else { return }
+                var urlRequest = URLRequest(url: url)
+                urlRequest.setValue("application/json", forHTTPHeaderField: "Content-Type")
+                
+                URLSession.shared.dataTask(with: urlRequest) { (data, response, error) in
+                    if error != nil {
+                        print(error!.localizedDescription)
                     }
                     
-                    self.tableView?.reloadData()
-                }
+                    guard let data = data else { return }
+                    //Implement JSON decoding and parsing
+                    do {
+                        //Decode retrived data with JSONDecoder and assing type of Article object
+                        self.employeeData = try JSONDecoder().decode([EmployeeFromAll].self, from: data)
+                        
+                        //Get back to the main queue
+                        DispatchQueue.main.async {
+                            if self.refCtrl != nil && (self.refCtrl?.isRefreshing)! {
+                                self.refCtrl?.endRefreshing()
+                            }
+                            
+                            self.tableView?.reloadData()
+                        }
+                        
+                    } catch let jsonError {
+                        print(jsonError)
+                    }
+                    
+                    }.resume()
+                //End implementing URLSession
                 
-            } catch let jsonError {
-                print(jsonError)
             }
-            
-            }.resume()
-        //End implementing URLSession
+        }
     }
     
     // Get specific employee details data from API
     func getEmployee(id: String)  {
-        //Implementing URLSession
-        let urlString = "http://localhost:9000/employees/id/" + id
+        var resourceFileDictionary: NSDictionary?
         
-        guard let url = URL(string: urlString) else { return }
-        var urlRequest = URLRequest(url: url)
-        urlRequest.setValue("application/json", forHTTPHeaderField: "Content-Type")
-        
-        URLSession.shared.dataTask(with: urlRequest) { (data, response, error) in
-            if error != nil {
-                print(error!.localizedDescription)
-            }
+        if let path = Bundle.main.path(forResource: "Info", ofType: "plist") {
+            resourceFileDictionary = NSDictionary(contentsOfFile: path)
             
-            guard let data = data else { return }
-            //Implement JSON decoding and parsing
-            do {
-                //Decode retrived data with JSONDecoder and assing type of Article object
-                let employeeDetails = try JSONDecoder().decode(EmployeeDetails.self, from: data)
+            if let resourceFileDictionaryContent = resourceFileDictionary {
+                //Implementing URLSession
+                let urlString = (resourceFileDictionaryContent.object(forKey: "ServerIP")! as! String) + "/employees/id/" + id
                 
-                //Get back to the main queue
-                DispatchQueue.main.async {
-                    let viewController: EmployeeDetailsViewController = UIStoryboard.init(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "employeeDetailsVC") as! EmployeeDetailsViewController
-                    viewController.employeeDetails = employeeDetails
-                    self.navigationController?.pushViewController(viewController, animated: true)
-                }
+                guard let url = URL(string: urlString) else { return }
+                var urlRequest = URLRequest(url: url)
+                urlRequest.setValue("application/json", forHTTPHeaderField: "Content-Type")
                 
-            } catch let jsonError {
-                print(jsonError)
+                URLSession.shared.dataTask(with: urlRequest) { (data, response, error) in
+                    if error != nil {
+                        print(error!.localizedDescription)
+                    }
+                    
+                    guard let data = data else { return }
+                    //Implement JSON decoding and parsing
+                    do {
+                        //Decode retrived data with JSONDecoder and assing type of Article object
+                        let employeeDetails = try JSONDecoder().decode(EmployeeDetails.self, from: data)
+                        
+                        //Get back to the main queue
+                        DispatchQueue.main.async {
+                            let viewController: EmployeeDetailsViewController = UIStoryboard.init(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "employeeDetailsVC") as! EmployeeDetailsViewController
+                            viewController.employeeDetails = employeeDetails
+                            self.navigationController?.pushViewController(viewController, animated: true)
+                        }
+                        
+                    } catch let jsonError {
+                        print(jsonError)
+                    }
+                    
+                    }.resume()
+                //End implementing URLSession
+                
             }
-            
-            }.resume()
-        //End implementing URLSession
+        }
     }
 
     func numberOfSections(in tableView: UITableView) -> Int {

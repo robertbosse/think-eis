@@ -102,34 +102,44 @@ class AddEmployeeViewController: UIViewController {
         do {
             //Decode retrived data with JSONDecoder and assing type of Article object
             let jsonData = try JSONEncoder().encode(employeeData)
-          
-            //Implementing URLSession
-            let urlString = "http://localhost:9000/employees"
             
-            guard let url = URL(string: urlString) else { return }
-            var urlRequest = URLRequest(url: url)
-            urlRequest.httpMethod = "post"
-            urlRequest.setValue("application/json", forHTTPHeaderField: "Content-Type")
-            urlRequest.httpBody = jsonData
+            var resourceFileDictionary: NSDictionary?
             
-            URLSession.shared.dataTask(with: urlRequest) { (data, response, error) in
-                if error != nil {
-                    print(error!.localizedDescription)
-                }
+            if let path = Bundle.main.path(forResource: "Info", ofType: "plist") {
+                resourceFileDictionary = NSDictionary(contentsOfFile: path)
                 
-                if let resp = response as? HTTPURLResponse {
-                    if resp.statusCode > 199 && resp.statusCode < 400 {
-                        DispatchQueue.main.async {
-                            // Go back to the previous ViewController
-                            let rootCtrler = self.navigationController?.viewControllers[0] as! EmployeesViewController
-                            rootCtrler.shouldRefresh = true
-                            _ = self.navigationController?.popViewController(animated: true)
+                if let resourceFileDictionaryContent = resourceFileDictionary {
+                    
+                    //Implementing URLSession
+                    let urlString = (resourceFileDictionaryContent.object(forKey: "ServerIP")! as! String) + "/employees"
+                    
+                    guard let url = URL(string: urlString) else { return }
+                    var urlRequest = URLRequest(url: url)
+                    urlRequest.httpMethod = "post"
+                    urlRequest.setValue("application/json", forHTTPHeaderField: "Content-Type")
+                    urlRequest.httpBody = jsonData
+                    
+                    URLSession.shared.dataTask(with: urlRequest) { (data, response, error) in
+                        if error != nil {
+                            print(error!.localizedDescription)
                         }
-                    }
+                        
+                        if let resp = response as? HTTPURLResponse {
+                            if resp.statusCode > 199 && resp.statusCode < 400 {
+                                DispatchQueue.main.async {
+                                    // Go back to the previous ViewController
+                                    let rootCtrler = self.navigationController?.viewControllers[0] as! EmployeesViewController
+                                    rootCtrler.shouldRefresh = true
+                                    _ = self.navigationController?.popViewController(animated: true)
+                                }
+                            }
+                        }
+                        
+                        }.resume()
+                    //End implementing URLSession
+                    
                 }
-                
-                }.resume()
-            //End implementing URLSession
+            }
         } catch let jsonError {
             print(jsonError)
         }

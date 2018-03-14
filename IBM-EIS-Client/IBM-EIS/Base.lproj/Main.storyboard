@@ -541,18 +541,15 @@
                                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                         <textInputTraits key="textInputTraits"/>
                                     </textField>
-                                    <textField opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="Ccn-ae-6V9">
-                                        <rect key="frame" x="114" y="498" width="242" height="30"/>
-                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                        <nil key="textColor"/>
-                                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                        <textInputTraits key="textInputTraits"/>
-                                    </textField>
                                     <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Fs8-Jm-oeG">
                                         <rect key="frame" x="50" y="546" width="274" height="30"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <state key="normal" title="Delete"/>
                                     </button>
+                                    <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="37y-sU-DqN">
+                                        <rect key="frame" x="114" y="498" width="49" height="31"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                    </switch>
                                 </subviews>
                             </scrollView>
                         </subviews>
@@ -566,7 +563,7 @@
                         <outlet property="emailTextField" destination="Gzg-hi-Gas" id="sRk-Bm-d1K"/>
                         <outlet property="firstNameTextField" destination="Ozr-vc-nfd" id="k58-yK-Iqa"/>
                         <outlet property="lastNameTextField" destination="w6w-KS-7YM" id="fua-vH-cRY"/>
-                        <outlet property="marriedTextField" destination="Ccn-ae-6V9" id="eWF-QL-u87"/>
+                        <outlet property="marriedSwitch" destination="37y-sU-DqN" id="mAZ-jJ-RAg"/>
                         <outlet property="payTextField" destination="XHo-qN-Y16" id="PvI-7h-Feb"/>
                         <outlet property="phoneTextField" destination="g5M-at-r5s" id="FvC-xF-ApN"/>
                         <outlet property="roleTextField" destination="K1u-S5-pbY" id="M0H-F1-ARe"/>
