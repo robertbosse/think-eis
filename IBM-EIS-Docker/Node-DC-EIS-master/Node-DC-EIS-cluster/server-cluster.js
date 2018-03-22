@@ -1,5 +1,5 @@
 /*
- Copyright (c) 2016 Intel Corporation 
+ Copyright (c) 2016 Intel Corporation
 
  Licensed under the Apache License, Version 2.0 (the "License");
  you may not use this file except in compliance with the License.
@@ -90,6 +90,9 @@ function startSingleNodeInstance() {
   //get employee's photo by ID
   app.get('/employees/id/:id/photo.jpg', employeesCtrl.findPhotoById);
 
+  //update employee by ID
+  app.put('/employees/id/:id', employeesCtrl.updateByEmployeeId);
+
   //delete employee by ID
   app.delete('/employees/id/:id', employeesCtrl.deleteByEmployeeId);
 
@@ -102,9 +105,9 @@ function startSingleNodeInstance() {
     var memoryInfo = {};
     ['rss', 'heapTotal', 'heapUsed'].forEach(function(key) {
       var memoryLog = afterMemusage[key]/(1024 * 1024).toFixed(2);
-      memoryInfo[key] = memoryLog; 
-    }); 
-    res.json({memoryInfo});    
+      memoryInfo[key] = memoryLog;
+    });
+    res.json({memoryInfo});
   });
 
   //get system info(hardware,software and version details)
@@ -115,7 +118,7 @@ function startSingleNodeInstance() {
     var versionInfo = {};
     var systemInfo = {};
     var cpus = os.cpus();
-    hwInfo.architecture = os.arch();  
+    hwInfo.architecture = os.arch();
     hwInfo.model = cpus[0]['model'];
     hwInfo.speed = cpus[0]['speed'];
     hwInfo.sys = cpus[0]['times']['sys'];
@@ -140,7 +143,7 @@ function startSingleNodeInstance() {
       cpu_count = os.cpus().length;
     }
     systemInfo.cpuCount = cpu_count;
-    res.json(systemInfo);     
+    res.json(systemInfo);
   });
 
   //stop the server
@@ -191,12 +194,12 @@ function startCluster(cpus) {
   } else {
     startSingleNodeInstance();
   }
-} 
+}
 
 if (cpuCount === undefined || isNaN(cpuCount) || cpuCount === 0) {
   console.log('Starting a single instance of Node.js process with (pid: ' + process.pid + ')');
   printHostInfo();
   startSingleNodeInstance();
 } else if (cpuCount !== 0) {
-  startCluster(cpuCount); 
+  startCluster(cpuCount);
 };
